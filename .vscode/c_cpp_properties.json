@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": ["/usr/include"]
+        },
+        {
+            "name": "Linux",
+            "includePath": ["/usr/include"]
+        },
+        {
+            "name": "Win32",
+            "includePath": ["C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include"]
+        },
+        {
+            "name": "MinGW",
+            "includePath": ["C:/MinGW/include"]
+        }
+    ]
+}

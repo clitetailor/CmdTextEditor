@@ -1,0 +1,49 @@
+{
+    "version": "0.1.0",
+    "command": "mingw32-make",
+	"echoCommand": false,
+	"showOutput": "silent",
+	"tasks": [
+					{
+						"suppressTaskName": true,
+						"taskName": "Build",
+						"isBuildCommand": true,
+						"args": [ "all" ],
+						"echoCommand": false,
+						"showOutput": "silent",
+						"problemMatcher": {
+								"owner": "c++",
+								"fileLocation": ["relative", "${workspaceRoot}"],
+								"pattern": {
+									"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+									"file": 1,
+									"line": 2,
+									"column": 3,
+									"severity": 4,
+									"message": 5
+								}
+							}
+					},
+					{
+						"suppressTaskName": true,
+						"taskName": "Test",
+						"isTestCommand": true,
+						"args": [ "test" ],
+						"echoCommand": false,
+						"showOutput": "silent",
+						"problemMatcher": {
+								"owner": "c++",
+								"fileLocation": ["relative", "${workspaceRoot}"],
+								"pattern": {
+									"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+									"file": 1,
+									"line": 2,
+									"column": 3,
+									"severity": 4,
+									"message": 5
+								}
+							}
+					}
+						
+			]
+}
