@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+class Line;
+
 class Word
 {
 private:
@@ -16,26 +18,28 @@ public:
 	
 	bool isEndOfFile();
 	
-	Word break(int position);
+	Word split(int position);
+	
+	friend Line& operator+ (Line& line, Word& word);
 };
 
 
 class Line
 {
 private:
-	Word * Words;
+	char * String;
 	int Width;
 	int Length;
-	int Top;
 public:
 	Line(int width);
-	Line(Line line) : ()
+	Line(const Line& line);
 	~Line();
 	
 	friend Line& operator+ (Line& line, Word& word);
 	friend std::ostream& operator<< (std::ostream& output, Line& line);
 	
 	int length();
+	int width();
 	
 	void flush();
 	

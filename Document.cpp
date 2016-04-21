@@ -1,14 +1,12 @@
 #include "Document.h"
 #include <iostream>
-
+#include <string>
 
 // class Word
-Word::Word() {};
-
 Word::Word(Word& word)
 {
 	String = word.String;
-};
+}
 
 std::istream& operator>> (std::istream& input, Word& word)
 {
@@ -39,12 +37,12 @@ bool Word::isEndOfFile()
 	return false;
 }
 
-Word Word::break(int position)
+Word Word::split(int position)
 {
-	Word word();
+	Word word;
 	word.String = std::string(String, 0, position);
 	word.String[position - 1] = '-';
-	String = std::string(String, position - 1, String.length - position + 1);
+	String = std::string(String, position - 1, String.length() - position + 1);
 	
 	return word;
 }
@@ -53,32 +51,49 @@ Word Word::break(int position)
 
 
 // class Line
-Line::Line(int width) : Width(width), Length(0), Top(0)
+Line::Line(int width) : Length(0), Width(width)
 {
-	Words = new Word[width];
+	String = new char[width + 1];
+};
+
+Line::Line(const Line& line)
+{
+	Width = line.Width;
+	Length = line.Length;
+	
+	String = new char[Width + 1];
+	
+	int i;
+	for (i = 0; i < Width + 1; ++i)
+	{
+		String[i] = line.String[i];
+	}
 }
 
 Line::~Line()
 {
-	delete [] Words;
+	delete [] String;
 }
-
 
 Line& operator+ (Line& line, Word& word)
 {
-	if (line.Top == 0)
+	int i;
+	for (i = 0; i < word.String.length(); ++i)
 	{
-		line.Words [line.Top] = word;
-		++line.Top;
-		
-		line.Length += word.Length();
+		line.String[line.Length + i] = word.String[i];
+	}
+	
+	if (line.Length + i == line.Width)
+	{
+		line.String[line.Length + i] = '\0';
+		line.Length += word.length();
 	}
 	else
 	{
-		line.Words [line.Top] = word;
-		++line.Top;
+		line.String[line.Length + i] = ' ';
+		line.String[line.Length + i] = '\0';
 		
-		line.Length += (word.Length() + 1);
+		line.Length += word.length() + 1;
 	}
 	
 	return line;
@@ -87,21 +102,40 @@ Line& operator+ (Line& line, Word& word)
 std::ostream& operator<< (std::ostream& output, Line& line)
 {
 	int i;
-	for (i = 0; i < line.Top; ++i)
+	for (i = 0; i < line.Length; ++i)
 	{
-		if (line.Top != 0)
-		{
-			output << " ";
-		}
-		
-		output << line.Words[i];
+		output << line.String[i];
 	}
 	
 	output << std::endl;
 }
 
+int Line::length()
+{
+	return Length;
+}
+
+int Line::width()
+{
+	return Width;
+}
+
 void Line::flush()
 {
-	Top = 0;
 	Length = 0;
+}
+
+void Line::alignLeft()
+{
+	
+}
+
+void Line::alignCenter()
+{
+	
+}
+
+void Line::alignRight()
+{
+	
 }
