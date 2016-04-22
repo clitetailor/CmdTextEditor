@@ -6,7 +6,7 @@ class Line;
 class Word
 {
 private:
-	std::string String;
+	std::string word_string;
 public:
 	Word() {};
 	Word(Word& word);
@@ -27,16 +27,17 @@ public:
 class Line
 {
 private:
-	char * String;
-	int Width;
-	int Length;
+	char * 	line_string;
+	int 	line_width;
+	int 	line_length;
 public:
+	Line();
 	Line(int width);
 	Line(const Line& line);
 	~Line();
 	
-	friend Line& operator+ (Line& line, Word& word);
-	friend std::ostream& operator<< (std::ostream& output, Line& line);
+	friend Line& 			operator+ (Line& line, Word& word);
+	friend std::ostream& 	operator<< (std::ostream& output, Line& line);
 	
 	int length();
 	int width();

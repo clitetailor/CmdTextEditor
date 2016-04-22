@@ -5,30 +5,30 @@
 // class Word
 Word::Word(Word& word)
 {
-	String = word.String;
+	word_string = word.word_string;
 }
 
 std::istream& operator>> (std::istream& input, Word& word)
 {
-	input >> word.String;
+	input >> word.word_string;
 }
 
 std::ostream& operator<< (std::ostream& output, Word& word)
 {
-	output << word.String;
+	output << word.word_string;
 }
 
 int Word::length()
 {
-	return String.length();
+	return word_string.length();
 }
 
 bool Word::isEndOfFile()
 {
 	int i;
-	for (i = 0; i < String.length(); ++i)
+	for (i = 0; i < word_string.length(); ++i)
 	{
-		if (String[i] == 4)
+		if (word_string[i] == 4)
 		{
 			return true;
 		}
@@ -40,9 +40,9 @@ bool Word::isEndOfFile()
 Word Word::split(int position)
 {
 	Word word;
-	word.String = std::string(String, 0, position);
-	word.String[position - 1] = '-';
-	String = std::string(String, position - 1, String.length() - position + 1);
+	word.word_string = std::string(word_string, 0, position);
+	word.word_string[position - 1] = '-';
+	word_string = std::string(word_string, position - 1, word_string.length() - position + 1);
 	
 	return word;
 }
@@ -51,49 +51,54 @@ Word Word::split(int position)
 
 
 // class Line
-Line::Line(int width) : Length(0), Width(width)
+Line::Line() : line_length(0), line_width(0)
 {
-	String = new char[width + 1];
+	line_string = NULL;
+}
+
+Line::Line(int width) : line_length(0), line_width(width)
+{
+	line_string = new char[width + 1];
 };
 
 Line::Line(const Line& line)
 {
-	Width = line.Width;
-	Length = line.Length;
+	line_width = line.line_width;
+	line_length = line.line_length;
 	
-	String = new char[Width + 1];
+	line_string = new char[line_width + 1];
 	
 	int i;
-	for (i = 0; i < Width + 1; ++i)
+	for (i = 0; i < line_width + 1; ++i)
 	{
-		String[i] = line.String[i];
+		line_string[i] = line.line_string[i];
 	}
 }
 
 Line::~Line()
 {
-	delete [] String;
+	delete [] line_string;
 }
 
 Line& operator+ (Line& line, Word& word)
 {
 	int i;
-	for (i = 0; i < word.String.length(); ++i)
+	for (i = 0; i < word.word_string.length(); ++i)
 	{
-		line.String[line.Length + i] = word.String[i];
+		line.line_string[line.line_length + i] = word.word_string[i];
 	}
 	
-	if (line.Length + i == line.Width)
+	if (line.line_length + i == line.line_width)
 	{
-		line.String[line.Length + i] = '\0';
-		line.Length += word.length();
+		line.line_string [line.line_length + i] = '\0';
+		line.line_length += word.length();
 	}
 	else
 	{
-		line.String[line.Length + i] = ' ';
-		line.String[line.Length + i] = '\0';
+		line.line_string [line.line_length + i] = ' ';
+		line.line_string[line.line_length + i] = '\0';
 		
-		line.Length += word.length() + 1;
+		line.line_length += word.length() + 1;
 	}
 	
 	return line;
@@ -102,9 +107,9 @@ Line& operator+ (Line& line, Word& word)
 std::ostream& operator<< (std::ostream& output, Line& line)
 {
 	int i;
-	for (i = 0; i < line.Length; ++i)
+	for (i = 0; i < line.line_length; ++i)
 	{
-		output << line.String[i];
+		output << line.line_string[i];
 	}
 	
 	output << std::endl;
@@ -112,17 +117,17 @@ std::ostream& operator<< (std::ostream& output, Line& line)
 
 int Line::length()
 {
-	return Length;
+	return line_length;
 }
 
 int Line::width()
 {
-	return Width;
+	return line_width;
 }
 
 void Line::flush()
 {
-	Length = 0;
+	line_length = 0;
 }
 
 void Line::alignLeft()

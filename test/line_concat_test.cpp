@@ -16,6 +16,10 @@ int main()
 	
 	std::cout << line << std::endl;
 	
+	line.flush();
+	
+	line = line + word2 + word3;
+	
 	Line newLine(line);
 	
 	std::cout << line << std::endl;

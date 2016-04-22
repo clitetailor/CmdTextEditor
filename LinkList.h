@@ -9,7 +9,6 @@
    recommend: hedge
 */
 
-#include <thread>
 
 namespace hedge
 {

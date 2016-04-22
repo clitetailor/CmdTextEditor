@@ -1,3 +1,5 @@
 all:
-	g++ -c Document.cpp main.cpp
-	g++ -o main.exe main.o Document.o
+	g++ -o main.exe main.cpp Document.cpp
+	
+test:
+	g++ -o main.exe test.cpp Document.cpp

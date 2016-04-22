@@ -1,7 +1,7 @@
 #include <iostream>
 /*/
  *
- * using camel convention
+ *
  *
  *
  *
@@ -22,6 +22,8 @@ int main()
 	Line line(line_size);
 	LinkList<Line> document;
 	
+	std::cout << "Type your text here! (Enter Ctr+D to finish):" << std::endl;
+	
 	do
 	{
 		std::cin >> word;
@@ -33,13 +35,15 @@ int main()
 				Word frac;
 				while (word.length() > line_size)
 				{
-					frac = word.break(line.length() + word.length() - line_size);
-					line = line + word;
+					frac = word.split(line.length() + word.length() - line_size);
+					line = line + frac;
 					
 					document.append(line);
 					
 					line.flush();
 				}
+				
+				line = line + word;
 			}
 			else
 			{
@@ -54,9 +58,9 @@ int main()
 		{
 			line = line + word;
 		}
-	} while (false != word.isEndOfLine());
+	} while (false == word.isEndOfFile());
 	
-	
+	std::cout << std::endl;
 	/*/
 	 *
 	 *
@@ -64,12 +68,12 @@ int main()
 	 *
 	 *
 	/*/
-
-	
 	std::string align;
-	std::cout << "align (left/center/right):" << std::endl;
+	std::cout << "align (left/center/right):";
 	
-	std::cin align;
+	std::cin >> align;
+	
+	std::cout << std::endl;
 	
 	LinkList<Line>::Node * temp;
 	
