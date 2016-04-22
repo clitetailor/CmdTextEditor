@@ -18,11 +18,15 @@ int main()
 	std::cout << "line width:";
 	std::cin >> line_size;
 	
+	std::cout << std::endl;
+	
 	Word word;
 	Line line(line_size);
 	LinkList<Line> document;
 	
 	std::cout << "Type your text here! (Enter Ctr+D to finish):" << std::endl;
+	
+	std::cout << std::endl;
 	
 	do
 	{
@@ -35,7 +39,7 @@ int main()
 				Word frac;
 				while (word.length() > line_size)
 				{
-					frac = word.split(line.length() + word.length() - line_size);
+					frac = word.split(line_size - line.length());
 					line = line + frac;
 					
 					document.append(line);

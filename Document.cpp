@@ -128,6 +128,7 @@ int Line::width()
 void Line::flush()
 {
 	line_length = 0;
+	line_string[0] = '\0';
 }
 
 void Line::alignLeft()
