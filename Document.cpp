@@ -85,7 +85,14 @@ Line& operator+ (Line& line, Word& word)
 	int i;
 	for (i = 0; i < word.word_string.length(); ++i)
 	{
-		line.line_string[line.line_length + i] = word.word_string[i];
+		if (word.word_string[i] == 4)
+		{
+			line.line_string[line.line_length + i] = '\0';
+		}
+		else
+		{
+			line.line_string[line.line_length + i] = word.word_string[i];
+		}
 	}
 	
 	if (line.line_length + i == line.line_width)

@@ -6,7 +6,6 @@
  *
  *
 /*/
-
 #include "Document.h"
 #include "LinkList.h"
 
@@ -61,6 +60,11 @@ int main()
 		else
 		{
 			line = line + word;
+			
+			if (false != word.isEndOfFile())
+			{
+				document.append(line);
+			}
 		}
 	} while (false == word.isEndOfFile());
 	
@@ -113,9 +117,7 @@ int main()
 	{
 		Line& current_line = temp->content();
 		
-		current_line.alignLeft();
-		
-		std::cout << current_line;
+		std::cout << current_line << std::endl;
 	}
 
 	// Đọc vào độ dài của một dòng. Nếu độ dài của một dòng quá ngắn (bé hơn 18) thì thông báo và yêu cầu nhập lại.
