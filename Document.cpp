@@ -82,11 +82,11 @@ std::istream& operator>> (std::istream& input, Word& word)
 }
 
 
-void Word::readFromFileStream(std::ifstream& input, std::size_t end_of_file)
+std::ifstream& operator>> (std::ifstream& input, Word& word)
 {
-	word_string = std::string("");
-	word_eof = false;
-	word_eol = false;
+	word.word_string = std::string("");
+	word.word_eof = false;
+	word.word_eol = false;
 	
 	char c;
 	
@@ -101,13 +101,13 @@ void Word::readFromFileStream(std::ifstream& input, std::size_t end_of_file)
 	
 	if (c == '\n')
 	{
-		word_eol = true;
-		return;
+		word.word_eol = true;
+		return input;
 	}
 	else if (input.tellg() == -1)
 	{
-		word_eof = true;
-		return;
+		word.word_eof = true;
+		return input;
 	}
 	else
 	{
@@ -120,29 +120,31 @@ void Word::readFromFileStream(std::ifstream& input, std::size_t end_of_file)
 			if (c == ' ')
 			{
 				input.unget();
-				return;
+				return input;
 			}
 			else if (c == '\t')
 			{
 				input.unget();
-				return;
+				return input;
 			}
 			else if (c == '\n')
 			{
 				input.unget();
-				return;
+				return input;
 			}
 			else if (input.tellg() == -1)
 			{
 				input.unget();
-				return;
+				return input;
 			}
 			else
 			{
-				word_string += c;
+				word.word_string += c;
 			}
 		} while (1);
 	}
+	
+	return input;
 }
 
 std::ostream& operator<< (std::ostream& output, Word& word)
@@ -273,6 +275,8 @@ void Line::alignRight()
 }
 
 
+
+
 // class Document
 Document::Document()
 {
@@ -310,7 +314,7 @@ void Document::readDocumentFromFile(std::string file_name)
 	
 	do
 	{
-		word.readFromFileStream(input ,file_size);
+		input >> word;
 		
 		if (false != word.isEndOfLine())
 		{
@@ -352,6 +356,8 @@ void Document::readDocumentFromFile(std::string file_name)
 			}
 		}
 	} while (false == word.isEndOfFile());
+	
+	input.close();
 }
 
 void Document::readDocumentFromKeyboard()
@@ -385,6 +391,138 @@ void Document::printDocument()
 	}
 	
 	std::cout << std::endl;
+}
+
+std::istream& operator>> (std::istream& input, Document& document)
+{
+	Word word;
+	
+	Line * line_pointer = & document.newLine();
+	
+	do
+	{
+		input >> word;
+		
+		if (false != word.isEndOfLine())
+		{
+			line_pointer = & document.newLine();
+		}
+		else if (false != word.isEndOfFile())
+		{
+			// Do nothing!
+		}
+		else 
+		{
+			if (line_pointer->length() + word.length() < document.document_line_width)
+			{
+				(* line_pointer) = (* line_pointer) + word;
+			}
+			else
+			{
+				if (word.length() < line_pointer->length())
+				{
+					line_pointer = & document.newLine();
+					
+					(* line_pointer) = (* line_pointer) + word;
+				}
+				else
+				{
+					Word frac;
+					
+					do
+					{
+						frac = word.split(document.document_line_width - line_pointer->length());
+						
+						(* line_pointer) = (* line_pointer) + frac;
+						
+						line_pointer = & document.newLine();
+					} while (word.length() > document.document_line_width);
+					
+					(* line_pointer) = (* line_pointer) + word;
+				}
+			}
+		}
+	} while (false == word.isEndOfFile());
+}
+
+std::ifstream& operator>> (std::ifstream& input, Document& document)
+{
+	Word word;
+	
+	Line * line_pointer = & document.newLine();
+	
+	do
+	{
+		input >> word;
+		
+		if (false != word.isEndOfLine())
+		{
+			line_pointer = & document.newLine();
+		}
+		else if (false != word.isEndOfFile())
+		{
+			// Do nothing!
+		}
+		else 
+		{
+			if (line_pointer->length() + word.length() < document.document_line_width)
+			{
+				(* line_pointer) = (* line_pointer) + word;
+			}
+			else
+			{
+				if (word.length() < line_pointer->length())
+				{
+					line_pointer = & document.newLine();
+					
+					(* line_pointer) = (* line_pointer) + word;
+				}
+				else
+				{
+					Word frac;
+					
+					do
+					{
+						frac = word.split(document.document_line_width - line_pointer->length());
+						
+						(* line_pointer) = (* line_pointer) + frac;
+						
+						line_pointer = & document.newLine();
+					} while (word.length() > document.document_line_width);
+					
+					(* line_pointer) = (* line_pointer) + word;
+				}
+			}
+		}
+	} while (false == word.isEndOfFile());
+}
+
+std::ostream& operator<< (std::ostream& output, Document& document)
+{
+	output << std::endl;
+	
+	int i;
+	for (i = 0; i < document.document_line_width; ++i)
+	{
+		output << "-";
+	}
+	
+	output << std::endl;
+	
+	LinkList<Line>::Node * temp;
+	for (temp = document.document_lines.head(); temp->isNotTail(); temp = temp->next())
+	{
+		Line& line = temp->content();
+		output << line;
+	}
+	
+	output << std::endl;
+	for (i = 0; i < document.document_line_width; ++i)
+	{
+		output << "-";
+	}
+	
+	output << std::endl;
 }
 
 void Document::saveDocument(std::string file_name)

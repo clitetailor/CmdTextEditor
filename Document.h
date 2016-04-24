@@ -24,7 +24,7 @@ public:
 	Word(Word& word);
 	
 	friend std::istream& operator>> (std::istream& input, Word& word);
-	void readFromFileStream(std::ifstream& input, std::size_t end_of_file);
+	friend std::ifstream& operator>> (std::ifstream& input, Word& word);
 	friend std::ostream& operator<< (std::ostream& output, Word& word);
 	
 	int length();
@@ -79,6 +79,11 @@ public:
 	
 	void readDocumentFromFile(std::string file_name);
 	void readDocumentFromKeyboard();
+	
+	friend std::istream& operator>> (std::istream& input, Document& document);
+	friend std::ifstream& operator>> (std::ifstream& input, Document& document);
+	
+	friend std::ostream& operator<< (std::ostream& output, Document& document);
 	
 	void printDocument();
 	
