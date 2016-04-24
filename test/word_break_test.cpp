@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>
+#include <cstring>
+#include <cstddef>
 
 #include "Document.h"
 
