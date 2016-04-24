@@ -1,0 +1,7 @@
+# Read a word from file can be done automatically
+# Tab character
+
+# Naming Convention:
+#	Variables: Lower case and underscores
+#	Methods: Camel case convention
+#	Classes: Pascal case

@@ -26,7 +26,7 @@ std::istream& operator>> (std::istream& input, Word& word)
 	do
 	{
 		c = input.get();
-	} while (c == ' ');
+	} while (c == ' ' || c == '\t');
 	
 	input.unget();
 	
@@ -52,6 +52,11 @@ std::istream& operator>> (std::istream& input, Word& word)
 			c = input.get();
 			
 			if (c == ' ')
+			{
+				input.unget();
+				return input;
+			}
+			else if (c == '\t')
 			{
 				input.unget();
 				return input;
@@ -88,7 +93,7 @@ void Word::readFromFileStream(std::ifstream& input, std::size_t end_of_file)
 	do
 	{
 		c = input.get();
-	} while (c == ' ');
+	} while (c == ' ' || c == '\t');
 	
 	input.unget();
 	
@@ -99,7 +104,7 @@ void Word::readFromFileStream(std::ifstream& input, std::size_t end_of_file)
 		word_eol = true;
 		return;
 	}
-	else if (input.tellg() == end_of_file)
+	else if (input.tellg() == -1)
 	{
 		word_eof = true;
 		return;
@@ -117,12 +122,17 @@ void Word::readFromFileStream(std::ifstream& input, std::size_t end_of_file)
 				input.unget();
 				return;
 			}
+			else if (c == '\t')
+			{
+				input.unget();
+				return;
+			}
 			else if (c == '\n')
 			{
 				input.unget();
 				return;
 			}
-			else if (input.tellg() == end_of_file)
+			else if (input.tellg() == -1)
 			{
 				input.unget();
 				return;
@@ -160,6 +170,13 @@ Word Word::split(int position)
 	Word word;
 	word.word_string = std::string(word_string, 0, position);
 	word.word_string[position - 1] = '-';
+	std::cout << std::endl;
+	if (position == 0)
+	{
+		word_string = std::string(word_string, 0, word_string.length() - position + 1);
+		return word;
+	}
+	
 	word_string = std::string(word_string, position - 1, word_string.length() - position + 1);
 	
 	return word;
