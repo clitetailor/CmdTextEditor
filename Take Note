@@ -1,6 +1,10 @@
 # Read a word from file can be done automatically
 # Tab character
 
+# Attention !
+#	Do not use "while (false)"
+#	Compiler will automatically remove while loop
+
 # Naming Convention:
 #	Variables: Lower case and underscores
 #	Methods: Camel case convention

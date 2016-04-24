@@ -172,7 +172,6 @@ Word Word::split(int position)
 	Word word;
 	word.word_string = std::string(word_string, 0, position);
 	word.word_string[position - 1] = '-';
-	std::cout << std::endl;
 	if (position == 0)
 	{
 		word_string = std::string(word_string, 0, word_string.length() - position + 1);
@@ -293,104 +292,6 @@ Line& Document::newLine()
 	document_lines.append(Line(document_line_width));
 	
 	return document_lines.tail()->content();
-}
-
-void Document::readDocumentFromFile(std::string file_name)
-{
-	std::ifstream input;
-	input.open(file_name.c_str(), std::ifstream::ate);
-	
-	if (false == input.is_open())
-	{
-		throw -1;
-	}
-	
-	std::size_t file_size = input.tellg();
-	input.seekg(std::ifstream::beg);
-	
-	Word word;
-	
-	Line * line_pointer = &newLine();
-	
-	do
-	{
-		input >> word;
-		
-		if (false != word.isEndOfLine())
-		{
-			line_pointer = &newLine();
-		}
-		else if (false != word.isEndOfFile())
-		{
-			// Do nothing!
-		}
-		else 
-		{
-			if (line_pointer->length() + word.length() < document_line_width)
-			{
-				(* line_pointer) = (* line_pointer) + word;
-			}
-			else
-			{
-				if (word.length() < line_pointer->length())
-				{
-					line_pointer = &newLine();
-					
-					(* line_pointer) = (* line_pointer) + word;
-				}
-				else
-				{
-					Word frac;
-					
-					do
-					{
-						frac = word.split(document_line_width - line_pointer->length());
-						
-						(* line_pointer) = (* line_pointer) + frac;
-						
-						line_pointer = &newLine();
-					} while (word.length() > document_line_width);
-					
-					(* line_pointer) = (* line_pointer) + word;
-				}
-			}
-		}
-	} while (false == word.isEndOfFile());
-	
-	input.close();
-}
-
-void Document::readDocumentFromKeyboard()
-{
-	
-}
-
-void Document::printDocument()
-{
-	std::cout << std::endl;
-	
-	int i;
-	for (i = 0; i < document_line_width; ++i)
-	{
-		std::cout << "-";
-	}
-	
-	std::cout << std::endl;
-	
-	LinkList<Line>::Node * temp;
-	for (temp = document_lines.head(); temp->isNotTail(); temp = temp->next())
-	{
-		Line& line = temp->content();
-		std::cout << line;
-	}
-	
-	std::cout << std::endl;
-	for (i = 0; i < document_line_width; ++i)
-	{
-		std::cout << "-";
-	}
-	
-	std::cout << std::endl;
 }
 
 std::istream& operator>> (std::istream& input, Document& document)
@@ -525,7 +426,12 @@ std::ostream& operator<< (std::ostream& output, Document& document)
 	output << std::endl;
 }
 
-void Document::saveDocument(std::string file_name)
+std::ofstream& operator<< (std::ofstream& output, Document& document)
 {
-	
+	LinkList<Line>::Node * temp;
+	for (temp = document.document_lines.head(); temp->isNotTail(); temp = temp->next())
+	{
+		Line& line = temp->content();
+		output << line;
+	}
 }

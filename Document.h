@@ -77,15 +77,13 @@ public:
 	
 	Line& newLine();
 	
-	void readDocumentFromFile(std::string file_name);
-	void readDocumentFromKeyboard();
-	
 	friend std::istream& operator>> (std::istream& input, Document& document);
 	friend std::ifstream& operator>> (std::ifstream& input, Document& document);
 	
+	void alignLeft();
+	void alignCenter();
+	void alignRight();
+	
 	friend std::ostream& operator<< (std::ostream& output, Document& document);
-	
-	void printDocument();
-	
-	void saveDocument(std::string file_name);
+	friend std::ofstream& operator<< (std::ofstream& output, Document& document);
 };
