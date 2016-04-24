@@ -22,6 +22,7 @@ int main()
 	std::string file_name;
 	int			line_width;
 	
+	/* Line width */
 	bool success = false;
 	do
 	{
@@ -61,6 +62,7 @@ int main()
 	std::ifstream 	input_file;
 	Document 		document(line_width);
 	
+	/* Open and read document from file */
 	success = false;
 	do
 	{
@@ -87,11 +89,137 @@ int main()
 			continue;
 		}
 		
+		input_file.close();
+		
 		success = true;
 	} while (false == success);
 	
+	/* Read successfully */
+	
+	/* Write document to console */
 	std::cout << document;
-	std::cout << "Save file? (yes/no):";
+	
+	/* Align document */
+	
+	/* Ask whether the user want to save file */
+	std::string accept;
+	success = false;
+	do
+	{
+		std::cout << "Save file? (yes/no):";
+		
+		std::getline(std::cin, accept);
+		
+		if (accept != "yes" || accept != "no")
+		{
+			std::cout << "Invalid option \"" << accept << "\" !" << std::endl;
+			std::cout << std::endl;
+			continue;
+		}
+		
+		success = true;
+	} while (false == success);
+	
+	std::cout << std::endl;
+	
+	/* Save file */
+	if (accept == "yes")
+	{
+		std::ofstream output_file;
+		
+		success = false;
+		do
+		{
+			/* Get file name */
+			std::cout << "File name:";
+		
+			std::string output_file_name;
+			std::getline(std::cin, output_file_name);
+			
+			output_file.open(output_file_name.c_str(), std::ios::ate);
+			
+			/* Can not open file */
+			if (false == output_file.is_open())
+			{
+				std::cout << "Can not open file \"" << output_file_name << "\" !" << std::endl;
+				
+				/* Ask user to open another file */
+				do
+				{
+					std::cout << "Do you want to continue? (yes/no):";
+					std::getline(std::cin, accept);
+					
+					if (accept != "yes" || accept != "no")
+					{
+						std::cout << "Invalid option \"" << accept << "\" !" << std::endl;
+					}
+				} while (accept != "yes" || accept != "no");
+				
+				std::cout << std::endl;
+				
+				if (accept == "no")
+				{
+					break;
+				}
+				
+				continue;
+			}
+			
+			/* File is successfully opened */
+			
+			/* If file already exists */
+			if (output_file.tellp() != 0)
+			{
+				do
+				{
+					std::cout << "File already exists! Do you want to continue? (yes/no):";
+					std::cin >> accept;
+					
+					if (accept != "no" && accept != "yes")
+					{
+						std::cout << "Invalid option \"" << accept << "\" !" << std::endl;
+					}
+				} while (accept != "no" || accept != "yes");
+				
+				/* If user don't want to overwrite the exist file */
+				if (accept == "no")
+				{
+					do
+					{
+						std::cout << "Do you want to save the file? (yes/no):";
+						std::cin >> accept;
+					
+						if (accept != "yes" || accept != "no")
+						{
+							std::cout << "Invalid option \"" << accept << "\" !" << std::endl;
+						}
+					} while (accept != "yes" || accept != "no");
+					
+					if (accept == "no")
+					{
+						break;
+					}
+					else
+					{
+						continue;
+					}
+				} /* If user don't want to overwrite the exist file */
+			} /* If file already exists */
+			
+			/* Write document to file */
+			try
+			{
+				output_file.seekp(std::ios::beg);
+				output_file << document;
+			}
+			catch (...)
+			{
+				std::cout << "File corrupt !" << std::endl;
+			}
+			
+			success = true;
+		} while (false == success);
+	}
 	
 	std::cout << std::endl << "Done!" << std::endl;
 	
