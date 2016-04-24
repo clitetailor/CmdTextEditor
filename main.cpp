@@ -67,6 +67,10 @@ int main()
 	do
 	{
 		std::cout << "File name:";
+		if (std::cin.get() != '\n')
+		{
+			std::cin.unget();
+		}
 		std::getline(std::cin, file_name);
 		
 		input_file.open(file_name.c_str());
@@ -107,10 +111,13 @@ int main()
 	do
 	{
 		std::cout << "Save file? (yes/no):";
-		
+		if (std::cin.get() != '\n')
+		{
+			std::cin.unget();
+		}
 		std::getline(std::cin, accept);
 		
-		if (accept != "yes" || accept != "no")
+		if (accept != "yes" && accept != "no")
 		{
 			std::cout << "Invalid option \"" << accept << "\" !" << std::endl;
 			std::cout << std::endl;
@@ -134,9 +141,13 @@ int main()
 			std::cout << "File name:";
 		
 			std::string output_file_name;
+			if (std::cin.get() != '\n')
+			{
+				std::cin.unget();
+			}
 			std::getline(std::cin, output_file_name);
 			
-			output_file.open(output_file_name.c_str(), std::ios::ate);
+			output_file.open(output_file_name.c_str(), std::ios::app);
 			
 			/* Can not open file */
 			if (false == output_file.is_open())
@@ -147,28 +158,35 @@ int main()
 				do
 				{
 					std::cout << "Do you want to continue? (yes/no):";
+					if (std::cin.get() != '\n')
+					{
+						std::cin.unget();
+					}
 					std::getline(std::cin, accept);
 					
-					if (accept != "yes" || accept != "no")
+					if (accept != "yes" && accept != "no")
 					{
 						std::cout << "Invalid option \"" << accept << "\" !" << std::endl;
 					}
-				} while (accept != "yes" || accept != "no");
+				} while (accept != "yes" && accept != "no");
 				
 				std::cout << std::endl;
 				
 				if (accept == "no")
 				{
+					output_file.close();
 					break;
 				}
 				
 				continue;
-			}
+			} /* Can not open file */
 			
 			/* File is successfully opened */
 			
+			output_file.seekp(std::ios::end);
+			
 			/* If file already exists */
-			if (output_file.tellp() != 0)
+			if (output_file.good())
 			{
 				do
 				{
@@ -179,7 +197,7 @@ int main()
 					{
 						std::cout << "Invalid option \"" << accept << "\" !" << std::endl;
 					}
-				} while (accept != "no" || accept != "yes");
+				} while (accept != "no" && accept != "yes");
 				
 				/* If user don't want to overwrite the exist file */
 				if (accept == "no")
@@ -189,20 +207,22 @@ int main()
 						std::cout << "Do you want to save the file? (yes/no):";
 						std::cin >> accept;
 					
-						if (accept != "yes" || accept != "no")
+						if (accept != "yes" && accept != "no")
 						{
 							std::cout << "Invalid option \"" << accept << "\" !" << std::endl;
 						}
-					} while (accept != "yes" || accept != "no");
+					} while (accept != "yes" && accept != "no");
 					
 					if (accept == "no")
 					{
+						output_file.close();
 						break;
 					}
-					else
-					{
-						continue;
-					}
+					
+					output_file.close();
+					success = false;
+					continue;
+					
 				} /* If user don't want to overwrite the exist file */
 			} /* If file already exists */
 			
@@ -217,6 +237,7 @@ int main()
 				std::cout << "File corrupt !" << std::endl;
 			}
 			
+			output_file.close();
 			success = true;
 		} while (false == success);
 	}
