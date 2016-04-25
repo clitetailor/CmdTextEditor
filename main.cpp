@@ -26,7 +26,7 @@ int main()
 	bool success = false;
 	do
 	{
-		std::cout << "Line width:";
+		std::cout << "Line width (20-200):";
 		
 		std::string line_width_string;
 		std::getline(std::cin, line_width_string);
@@ -47,6 +47,13 @@ int main()
 			
 			if (line_width < 20)
 			{
+				std::cout << "Line width too short !" << std::endl << std::endl;
+				throw -1;
+			}
+			
+			if (line_width > 200)
+			{
+				std::cout << "Line width too long !" << std::endl << std::endl;
 				throw -1;
 			}
 		}
@@ -147,13 +154,38 @@ int main()
 			}
 			std::getline(std::cin, output_file_name);
 			
-			output_file.open(output_file_name.c_str(), std::ios::app);
+			/* Append or rewrite */
+			std::string app_or_out;
+			do
+			{
+				std::cout << "Append or rewrite? (app/out):";
+				
+				if (std::cin.get() != '\n')
+				{
+					std::cin.unget();
+				}
+				std::getline(std::cin, app_or_out);
+				
+				if (app_or_out != "app" && app_or_out != "out")
+				{
+					std::cout << "Invalid option \"" << app_or_out << "\" !" << std::endl;
+				}
+			} while (app_or_out != "app" && app_or_out != "out");
+			
+			if (app_or_out == "out")
+			{
+				output_file.open(output_file_name.c_str(), std::ios::out);
+			}
+			else
+			{
+				output_file.open(output_file_name.c_str(), std::ios::out | std::ios::app | std::ios::binary);
+			}
 			
 			/* Can not open file */
 			if (false == output_file.is_open())
 			{
 				std::cout << "Can not open file \"" << output_file_name << "\" !" << std::endl;
-				
+				std::cout << std::endl;
 				/* Ask user to open another file */
 				do
 				{
@@ -183,53 +215,9 @@ int main()
 			
 			/* File is successfully opened */
 			
-			output_file.seekp(std::ios::end);
-			
-			/* If file already exists */
-			if (output_file.good())
-			{
-				do
-				{
-					std::cout << "File already exists! Do you want to continue? (yes/no):";
-					std::cin >> accept;
-					
-					if (accept != "no" && accept != "yes")
-					{
-						std::cout << "Invalid option \"" << accept << "\" !" << std::endl;
-					}
-				} while (accept != "no" && accept != "yes");
-				
-				/* If user don't want to overwrite the exist file */
-				if (accept == "no")
-				{
-					do
-					{
-						std::cout << "Do you want to save the file? (yes/no):";
-						std::cin >> accept;
-					
-						if (accept != "yes" && accept != "no")
-						{
-							std::cout << "Invalid option \"" << accept << "\" !" << std::endl;
-						}
-					} while (accept != "yes" && accept != "no");
-					
-					if (accept == "no")
-					{
-						output_file.close();
-						break;
-					}
-					
-					output_file.close();
-					success = false;
-					continue;
-					
-				} /* If user don't want to overwrite the exist file */
-			} /* If file already exists */
-			
 			/* Write document to file */
 			try
 			{
-				output_file.seekp(std::ios::beg);
 				output_file << document;
 			}
 			catch (...)
