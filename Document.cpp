@@ -281,6 +281,12 @@ void Line::alignCenter()
 
 void Line::alignRight()
 {
+	if (line_string[line_length - 1] == ' ')
+	{
+		line_string[line_length - 1] = '\n';
+		line_length--;
+	}
+	
 	int start = (line_width - line_length);
 	std::string line_copy(line_string, line_length);
 	
