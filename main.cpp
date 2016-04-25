@@ -77,7 +77,7 @@ int main()
 		success = true;
 	} while (false == success);
 	
-	Document 		document(line_width);
+	Document document(line_width);
 	
 	/* Open and read document from file */
 	try
