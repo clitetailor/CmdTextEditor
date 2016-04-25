@@ -15,11 +15,15 @@
 
 using namespace hedge;
 
+void openDocumentFromFile(Document& document);
+void getDocumentFromKeyboard(Document& document);
+
+void saveDocument(Document& document);
+
 int main()
 {
 	std::cout << std::endl;
 	
-	std::string file_name;
 	int			line_width;
 	
 	/* Line width */
@@ -65,12 +69,82 @@ int main()
 		success = true;
 	} while (false == success);
 	
-	
-	std::ifstream 	input_file;
 	Document 		document(line_width);
 	
 	/* Open and read document from file */
-	success = false;
+	try
+	{
+		std::string choice;
+		
+		do
+		{
+			std::cout << "File or Keyboard? (file/key):";
+			std::getline(std::cin, choice);
+			
+			if (choice != "file" && choice != "key")
+			{
+				std::cout << "Invalid \"" << choice << "\" !" << std::endl;
+			}
+		} while (choice != "file" && choice != "key");
+		
+		std::cout << std::endl;
+		
+		if (choice == "file")
+		{
+			openDocumentFromFile(document);
+		}
+		else
+		{
+			std::cout << "Type your text here! (Enter Ctrl+D to finish):" << std::endl << std::endl;
+			int i;
+			for (i = 0; i < line_width; ++i)
+			{
+				std::cout << "-";
+			}
+			std::cout << std::endl;
+			getDocumentFromKeyboard(document);
+			for (i = 0; i < line_width; ++i)
+			{
+				std::cout << "-";
+			}
+			std::cout << std::endl;
+		}
+	}
+	catch(...)
+	{
+		std::cout << "Error orcurred !" << std::endl;
+		return 0;
+	}
+	
+	/* Read successfully */
+	
+	/* Write document to console */
+	std::cout << document;
+	
+	/* Align document */
+	
+	/* Save file */
+	saveDocument(document);
+	
+	std::cout << std::endl << "Done!" << std::endl;
+	
+	return 0;
+} /* Main */
+/*/
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+/*/
+void openDocumentFromFile(Document& document)
+{
+	std::ifstream input_file;
+	std::string file_name;
+	bool		success = false;
 	do
 	{
 		std::cout << "File name:";
@@ -104,17 +178,17 @@ int main()
 		
 		success = true;
 	} while (false == success);
-	
-	/* Read successfully */
-	
-	/* Write document to console */
-	std::cout << document;
-	
-	/* Align document */
-	
-	/* Ask whether the user want to save file */
+}
+
+void getDocumentFromKeyboard(Document& document)
+{
+	std::cin >> document;
+}
+
+void saveDocument(Document& document)
+{
 	std::string accept;
-	success = false;
+	bool success = false;
 	do
 	{
 		std::cout << "Save file? (yes/no):";
@@ -136,7 +210,6 @@ int main()
 	
 	std::cout << std::endl;
 	
-	/* Save file */
 	if (accept == "yes")
 	{
 		std::ofstream output_file;
@@ -229,8 +302,4 @@ int main()
 			success = true;
 		} while (false == success);
 	}
-	
-	std::cout << std::endl << "Done!" << std::endl;
-	
-	return 0;
 }

@@ -238,7 +238,6 @@ std::ostream& operator<< (std::ostream& output, Line& line)
 	{
 		output << line.line_string[i];
 	}
-	
 	output << std::endl;
 }
 
