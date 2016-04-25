@@ -182,8 +182,15 @@ Word Word::split(int position)
 	
 	return word;
 }
-
-
+/*/
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+/*/
 
 
 // class Line
@@ -257,22 +264,43 @@ void Line::flush()
 	line_string[0] = '\0';
 }
 
-void Line::alignLeft()
-{
-	
-}
-
 void Line::alignCenter()
 {
+	int start = (line_width - line_length) / 2;
+	std::string line_copy(line_string, line_length);
 	
+	int i;
+	for (i = 0; i < line_width; ++i)
+	{
+		line_string[i] = ' ';
+	}
+	
+	line_copy.copy(& line_string[start], line_copy.length(), 0);
+	line_length += start;
 }
 
 void Line::alignRight()
 {
+	int start = (line_width - line_length);
+	std::string line_copy(line_string, line_length);
 	
+	int i;
+	for (i = 0; i < line_width; ++i)
+	{
+		line_string[i] = ' ';
+	}
+	
+	line_copy.copy(& line_string[start], line_copy.length(), 0);
+	line_length += start;
 }
-
-
+/*/
+ *
+ *
+ *
+ *
+ *
+ *
+/*/
 
 
 // class Document
@@ -396,6 +424,25 @@ std::ifstream& operator>> (std::ifstream& input, Document& document)
 		}
 	} while (false == word.isEndOfFile());
 }
+
+void Document::alignRight()
+{
+	LinkList<Line>::Node * temp;
+	for (temp = document_lines.head(); temp->isNotTail(); temp = temp->next())
+	{
+		temp->content().alignRight();
+	}
+}
+
+void Document::alignCenter()
+{
+	LinkList<Line>::Node * temp;
+	for (temp = document_lines.head(); temp->isNotTail(); temp = temp->next())
+	{
+		temp->content().alignCenter();
+	}
+}
+
 
 std::ostream& operator<< (std::ostream& output, Document& document)
 {

@@ -19,7 +19,15 @@ void openDocumentFromFile(Document& document);
 void getDocumentFromKeyboard(Document& document);
 
 void saveDocument(Document& document);
-
+/*/
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+/*/
 int main()
 {
 	std::cout << std::endl;
@@ -117,6 +125,35 @@ int main()
 	}
 	
 	/* Read successfully */
+	
+	/* Align */
+	std::string align;
+	std::cout << "Align (left/center/right):";
+	do
+	{
+		if (std::cin.get() != '\n')
+		{
+			std::cin.unget();
+		}
+		std::getline(std::cin, align);
+		if (align != "left" && align != "center" && align != "right")
+		{
+			std::cout << "Invalid option \"" << align << "\" !" << std::endl << std::endl;
+		}
+	} while (align != "left" && align != "center" && align != "right");
+	
+	if (align == "right")
+	{
+		document.alignRight();
+	}
+	else if (align == "center")
+	{
+		document.alignCenter();
+	}
+	else
+	{
+		
+	}
 	
 	/* Write document to console */
 	std::cout << document;

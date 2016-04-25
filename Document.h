@@ -61,7 +61,6 @@ public:
 	
 	void flush();
 	
-	void alignLeft();
 	void alignRight();
 	void alignCenter();
 };
