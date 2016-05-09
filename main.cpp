@@ -30,6 +30,7 @@ void saveDocument(Document& document);
 /*/
 int main()
 {
+	std::ios_base::sync_with_stdio(false);
 	std::cout << std::endl;
 	
 	int			line_width;
@@ -191,7 +192,9 @@ void openDocumentFromFile(Document& document)
 		}
 		std::getline(std::cin, file_name);
 		
-		input_file.open(file_name.c_str());
+		input_file.open(file_name.c_str(), std::ios::in | std::ios::binary);
+		
+		input_file.seekg(std::ios::beg);
 		
 		if (false == input_file.is_open())
 		{
