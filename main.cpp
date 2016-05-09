@@ -128,9 +128,9 @@ int main()
 	
 	/* Align */
 	std::string align;
-	std::cout << "Align (left/center/right):";
 	do
 	{
+		std::cout << "Align (left/center/right):";
 		if (std::cin.get() != '\n')
 		{
 			std::cin.unget();
