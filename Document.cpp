@@ -28,10 +28,6 @@ std::istream& operator>> (std::istream& input, Word& word)
 		c = input.get();
 	} while (c == ' ' || c == '\t');
 	
-	input.unget();
-	
-	c = input.get();
-	
 	if (c == '\n')
 	{
 		word.word_eol = true;
