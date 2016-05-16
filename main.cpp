@@ -291,7 +291,7 @@ void saveDocument(Document& document)
 			}
 			else
 			{
-				output_file.open(output_file_name.c_str(), std::ios::out | std::ios::app | std::ios::binary);
+				output_file.open(output_file_name.c_str(), std::ios::out | std::ios::app);
 			}
 			
 			/* Can not open file */
